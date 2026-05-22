@@ -3,6 +3,7 @@ package com.hesias.rest;
 import com.hesias.dto.OwnerRequestDto;
 import com.hesias.dto.OwnerResponseDto;
 import com.hesias.service.OwnerService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,12 +29,12 @@ public class OwnerController {
     }
 
     @PostMapping
-    public ResponseEntity<OwnerResponseDto> create(@RequestBody OwnerRequestDto dto) {
+    public ResponseEntity<OwnerResponseDto> create(@RequestBody @Valid OwnerRequestDto dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(ownerService.create(dto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<OwnerResponseDto> update(@PathVariable Long id, @RequestBody OwnerRequestDto dto) {
+    public ResponseEntity<OwnerResponseDto> update(@PathVariable Long id, @RequestBody @Valid OwnerRequestDto dto) {
         return ResponseEntity.ok(ownerService.update(id, dto));
     }
 

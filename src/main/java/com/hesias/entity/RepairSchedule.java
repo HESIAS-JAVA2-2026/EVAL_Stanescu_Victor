@@ -7,8 +7,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "repair_schedule")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

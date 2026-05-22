@@ -3,6 +3,7 @@ package com.hesias.rest;
 import com.hesias.dto.GarageRequestDto;
 import com.hesias.dto.GarageResponseDto;
 import com.hesias.service.GarageService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,12 +34,12 @@ public class GarageController {
     }
 
     @PostMapping
-    public ResponseEntity<GarageResponseDto> create(@RequestBody GarageRequestDto dto) {
+    public ResponseEntity<GarageResponseDto> create(@RequestBody @Valid GarageRequestDto dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(garageService.create(dto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<GarageResponseDto> update(@PathVariable Long id, @RequestBody GarageRequestDto dto) {
+    public ResponseEntity<GarageResponseDto> update(@PathVariable Long id, @RequestBody @Valid GarageRequestDto dto) {
         return ResponseEntity.ok(garageService.update(id, dto));
     }
 

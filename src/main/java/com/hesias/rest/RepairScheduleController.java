@@ -3,6 +3,7 @@ package com.hesias.rest;
 import com.hesias.dto.RepairScheduleRequestDto;
 import com.hesias.dto.RepairScheduleResponseDto;
 import com.hesias.service.RepairScheduleService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,7 @@ public class RepairScheduleController {
     }
 
     @PostMapping
-    public ResponseEntity<RepairScheduleResponseDto> create(@RequestBody RepairScheduleRequestDto dto) {
+    public ResponseEntity<RepairScheduleResponseDto> create(@RequestBody @Valid RepairScheduleRequestDto dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(repairScheduleService.create(dto));
     }
 
