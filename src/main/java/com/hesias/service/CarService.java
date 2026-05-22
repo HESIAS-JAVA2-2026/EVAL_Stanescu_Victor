@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class CarService {
 
@@ -20,17 +21,18 @@ public class CarService {
     private final OwnerRepository ownerRepository;
     private final CarMapper carMapper;
 
+    @Transactional(readOnly = true)
     public CarResponseDto findById(Long id) {
         return carMapper.toResponseDto(getOrThrow(id));
     }
 
+    @Transactional(readOnly = true)
     public CarResponseDto findByLicensePlate(String licensePlate) {
         return carRepository.findByLicensePlate(licensePlate)
                 .map(carMapper::toResponseDto)
                 .orElseThrow(() -> new EntityNotFoundException("Car not found with license plate: " + licensePlate));
     }
 
-    @Transactional
     public CarResponseDto create(CarRequestDto dto) {
         Owner owner = ownerRepository.findById(dto.ownerId())
                 .orElseThrow(() -> new EntityNotFoundException("Owner not found with id: " + dto.ownerId()));

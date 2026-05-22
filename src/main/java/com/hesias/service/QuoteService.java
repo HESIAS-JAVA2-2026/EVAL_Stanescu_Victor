@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 import java.time.Year;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class QuoteService {
 
@@ -23,7 +24,6 @@ public class QuoteService {
     private final GarageRepository garageRepository;
     private final QuoteMapper quoteMapper;
 
-    @Transactional
     public QuoteResponseDto create(QuoteRequestDto dto) {
         Garage garage = garageRepository.findById(dto.garageId())
                 .orElseThrow(() -> new EntityNotFoundException("Garage not found with id: " + dto.garageId()));

@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class GarageService {
 
@@ -22,41 +23,40 @@ public class GarageService {
     private final CarRepository carRepository;
     private final GarageMapper garageMapper;
 
+    @Transactional(readOnly = true)
     public List<GarageResponseDto> findAll() {
         return garageRepository.findAll().stream()
                 .map(garageMapper::toResponseDto)
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public GarageResponseDto findById(Long id) {
         return garageMapper.toResponseDto(getOrThrow(id));
     }
 
+    @Transactional(readOnly = true)
     public GarageResponseDto findByName(String name) {
         return garageRepository.findByName(name)
                 .map(garageMapper::toResponseDto)
                 .orElseThrow(() -> new EntityNotFoundException("Garage not found with name: " + name));
     }
 
-    @Transactional
     public GarageResponseDto create(GarageRequestDto dto) {
         Garage garage = garageMapper.toEntity(dto);
         return garageMapper.toResponseDto(garageRepository.save(garage));
     }
 
-    @Transactional
     public GarageResponseDto update(Long id, GarageRequestDto dto) {
         Garage garage = getOrThrow(id);
         garageMapper.update(dto, garage);
         return garageMapper.toResponseDto(garageRepository.save(garage));
     }
 
-    @Transactional
     public void delete(Long id) {
         garageRepository.delete(getOrThrow(id));
     }
 
-    @Transactional
     public GarageResponseDto addCarToStock(Long garageId, Long carId) {
         Garage garage = getOrThrow(garageId);
         Car car = carRepository.findById(carId)

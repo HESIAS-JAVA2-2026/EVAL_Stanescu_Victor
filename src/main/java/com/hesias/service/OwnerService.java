@@ -13,36 +13,39 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class OwnerService {
 
     private final OwnerRepository ownerRepository;
     private final OwnerMapper ownerMapper;
 
+    @Transactional(readOnly = true)
     public List<OwnerResponseDto> findAll() {
         return ownerRepository.findAll().stream()
                 .map(ownerMapper::toResponseDto)
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public OwnerResponseDto findById(Long id) {
         return ownerMapper.toResponseDto(getOrThrow(id));
     }
 
-    @Transactional
+
     public OwnerResponseDto create(OwnerRequestDto dto) {
         Owner owner = ownerMapper.toEntity(dto);
         return ownerMapper.toResponseDto(ownerRepository.save(owner));
     }
 
-    @Transactional
+
     public OwnerResponseDto update(Long id, OwnerRequestDto dto) {
         Owner owner = getOrThrow(id);
         ownerMapper.update(dto, owner);
         return ownerMapper.toResponseDto(ownerRepository.save(owner));
     }
 
-    @Transactional
+
     public void delete(Long id) {
         ownerRepository.delete(getOrThrow(id));
     }

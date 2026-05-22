@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class RepairScheduleService {
 
@@ -25,19 +26,20 @@ public class RepairScheduleService {
     private final CarRepository carRepository;
     private final RepairScheduleMapper repairScheduleMapper;
 
+    @Transactional(readOnly = true)
     public List<RepairScheduleResponseDto> findByGarageId(Long garageId) {
         return repairScheduleRepository.findByGarageIdOrderByWeekNumberAscRepairOrderAsc(garageId).stream()
                 .map(repairScheduleMapper::toResponseDto)
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public List<RepairScheduleResponseDto> findByCarId(Long carId) {
         return repairScheduleRepository.findByCarId(carId).stream()
                 .map(repairScheduleMapper::toResponseDto)
                 .toList();
     }
 
-    @Transactional
     public RepairScheduleResponseDto create(RepairScheduleRequestDto dto) {
         Garage garage = garageRepository.findById(dto.garageId())
                 .orElseThrow(() -> new EntityNotFoundException("Garage not found with id: " + dto.garageId()));
@@ -50,7 +52,6 @@ public class RepairScheduleService {
         return repairScheduleMapper.toResponseDto(repairScheduleRepository.save(schedule));
     }
 
-    @Transactional
     public void delete(Long id) {
         repairScheduleRepository.delete(repairScheduleRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Repair schedule not found with id: " + id)));
